@@ -1,0 +1,7 @@
+- name: Register with activation key and org
+  tags: rhel
+  community.general.redhat_subscription:
+    activationkey: "{{ rhel_activation_key }}"
+    org_id: "{{ organization_id }}"
+    consumer_name: "{{ inventory_hostname }}"
+    state: "present"

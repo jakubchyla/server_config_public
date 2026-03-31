@@ -1,0 +1,4 @@
+- name: Delete config directory
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    state: absent

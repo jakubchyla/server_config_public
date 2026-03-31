@@ -1,0 +1,24 @@
+- name: Copy sshd config file
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/{{ inventory_hostname }}/sshd_config"
+    dest: "/etc/ssh/sshd_config"
+    owner: root
+    group: root
+    mode: "600"
+
+- name: Create centralized authorized_keys directory
+  ansible.builtin.file:
+    path: "/etc/ssh/authorized_keys"
+    state: directory
+    owner: root
+    group: root
+    mode: "755"
+
+- name: Copy nas ssh key
+  ansible.builtin.copy:
+    src: "{{ config_dir }}/{{ inventory_hostname }}/"
+    dest: "/etc/ssh/authorized_keys/{{ ansible_user }}_sshfs"
+    owner: root
+    group: root
+    mode: "644"
+  when: nas

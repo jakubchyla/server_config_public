@@ -1,0 +1,13 @@
+[Unit]
+Description=Backblaze Backup Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+LoadCredentialEncrypted=b2_application_key:/etc/rclone/b2_credentials/application_key.creds
+LoadCredentialEncrypted=b2_application_key_id:/etc/rclone/b2_credentials/application_key_id.creds
+ExecStart=/usr/local/bin/backblaze_backup.sh
+
+[Install]
+WantedBy=multi-user.target

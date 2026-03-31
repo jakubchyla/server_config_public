@@ -1,0 +1,19 @@
+- name: Upgrade all packages
+  tags:
+    - dnf_upgrade
+    - dnf_update
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+
+- name: Install packages
+  ansible.builtin.dnf:
+    pkg: "{{ dnf_packages_install }}"
+    state: present
+
+- name: Install host specific packages
+  ansible.builtin.dnf:
+    name: "{{ host_specific_packages }}"
+    state: present
+  when: host_specific_packages is defined

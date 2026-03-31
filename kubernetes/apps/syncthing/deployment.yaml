@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syncthing-deployment
+  namespace: syncthing
+spec:
+  selector:
+    matchLabels:
+      app: syncthing
+  template:
+    metadata:
+      labels:
+        app: syncthing
+    spec:
+      initContainers:
+        - name: volume-permissions
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: "VOLUME_CONFIG"
+              value: "/config"
+            - name: "VOLUME_DATA"
+              value: "/data"
+          command:
+            - sh
+            - -c
+            - |
+              chown -R 1001:1001 $VOLUME_CONFIG
+              chown -R 1001:1001 $VOLUME_DATA
+              printf "%s\n" "set volumes ownership"
+          volumeMounts:
+          - mountPath: /config
+            name: syncthing-config-storage
+          - mountPath: /data
+            name: syncthing-data-storage
+      containers:
+        - name: syncthing
+          image: linuxserver/syncthing
+          env:
+            - name: PUID
+              value: "1001"
+            - name: PGID
+              value: "1001"
+          ports:
+          - containerPort: 8384
+            protocol: TCP
+          - containerPort: 22000
+            protocol: TCP
+          - containerPort: 22000
+            protocol: UDP
+          - containerPort: 21027
+            protocol: UDP
+          volumeMounts:
+          - mountPath: /config
+            name: syncthing-config-storage
+          - mountPath: /data
+            name: syncthing-data-storage
+      volumes:
+        - name: syncthing-config-storage
+          persistentVolumeClaim:
+            claimName: syncthing-config-pvc
+        - name: syncthing-data-storage
+          persistentVolumeClaim:
+            claimName: syncthing-data-pvc

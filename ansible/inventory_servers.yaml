@@ -1,0 +1,23 @@
+all:
+  vars:
+    config_dir: "<config path>"
+    k3s_nodes:
+      - <ip_address>
+      - <ip_address>
+  children:
+    control_nodes:
+      vars:
+        k3s_control_node: true
+      hosts:
+        <hostname1>:
+          ansible_host: <ip_address>
+          ansible_user: ansible
+          host_specific_packages:
+            - "nfs-utils"
+          nas: true
+
+    managed_nodes:
+      hosts:
+        <hostname2>:
+          ansible_host: <ip_address>
+          ansible_user: ansible

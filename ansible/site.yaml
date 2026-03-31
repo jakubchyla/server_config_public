@@ -1,0 +1,29 @@
+- name: Initial configuration
+  become: true
+  become_user: root
+  hosts: all
+  roles:
+    - initial_configuration
+
+- name: Install packages
+  become: true
+  become_user: root
+  hosts: all
+  roles:
+    - install_packages
+
+- name: Configure network
+  tags: network
+  become: true
+  become_user: root
+  hosts: all
+  roles:
+    - network
+
+- name: Install and configure k3s
+  tags: k3s
+  become: true
+  become_user: root
+  hosts: all
+  roles:
+    - k3s

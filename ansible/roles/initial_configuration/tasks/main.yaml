@@ -1,0 +1,7 @@
+- name: Set hostname
+  ansible.builtin.import_tasks:
+    file: "hostname.yaml"
+
+- name: Set up subscription-manager
+  ansible.builtin.import_tasks:
+    file: "subscription_manager.yaml"

@@ -1,0 +1,7 @@
+- name: Load variables
+  ansible.builtin.include_vars:
+    file: vault.yaml
+
+- name: Install k3s
+  ansible.builtin.import_tasks:
+    file: install_k3s.yaml

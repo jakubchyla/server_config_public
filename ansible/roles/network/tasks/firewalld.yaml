@@ -1,0 +1,28 @@
+- name: Ensure firewalld serivce is enabled
+  ansible.builtin.systemd:
+    name: firewalld
+    state: "started"
+    enabled: true
+
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Ensure firewalld is installed
+  when: "'firewalld' not in ansible_facts.packages"
+  ansible.builtin.fail:
+    msg: Firewalld not installed
+
+- name: Enable public zone
+  ansible.posix.firewalld:
+    permanent: true
+    zone: "public"
+    state: "present"
+  notify: "Reload firewalld"
+
+- name: Add services to firewalld
+  ansible.posix.firewalld:
+    permanent: true
+    port: 22/tcp
+    state: "enabled"
+  notify: "Reload firewalld"

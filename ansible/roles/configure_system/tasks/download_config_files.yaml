@@ -1,0 +1,26 @@
+- name: Ensure config_dir parent exists
+  ansible.builtin.file:
+    path: "{{ config_dir | dirname }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "755"
+
+- name: Ensure config directory is empty
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    state: absent
+
+- name: Copy ssh key if testing
+  ansible.builtin.copy:
+    src: "~/.ssh/config_files_repo"
+    dest: "/home/{{ ansible_user }}/.ssh/config_files_repo"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "600"
+
+- name: Download config files
+  ansible.builtin.git:
+    repo: "<config repo url>"
+    dest: "/home/{{ ansible_user }}/src/config_files"
+    ssh_opts: "-i ~/.ssh/config_files_repo"

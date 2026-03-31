@@ -1,0 +1,13 @@
+- name: Add hades to hosts file
+  ansible.builtin.lineinfile:
+    path: "/etc/hosts"
+    regexp: "<hostname1>"
+    line: "<ip address> <hostname1>"
+    state: present
+
+- name: Add charon to hosts file
+  ansible.builtin.lineinfile:
+    path: "/etc/hosts"
+    regexp: "<hostame2>"
+    line: "<ip address> <hostname2>"
+    state: present

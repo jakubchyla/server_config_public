@@ -1,0 +1,26 @@
+- name: Create zone for kubernetes
+  ansible.posix.firewalld:
+    zone: "kubernetes"
+    state: "present"
+    permanent: true
+
+- name: Add other nodes to kubernetes zone
+  ansible.posix.firewalld:
+    zone: "kubernetes"
+    source: "{{ item }}"
+    state: "enabled"
+    permanent: true
+  loop: "{{ k3s_nodes }}"
+
+- name: Add ports needed by k3s
+  ansible.posix.firewalld:
+    zone: "kubernetes"
+    port: "{{ item }}"
+    state: "enabled"
+    permanent: true
+  loop: "{{ k3s_ports }}"
+
+- name: Reload firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: reloaded

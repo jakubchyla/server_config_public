@@ -1,0 +1,16 @@
+# don't enable or start backup
+- name: Copy backup script
+  ansible.builtin.copy:
+    src: backblaze_backup.sh
+    dest: /usr/local/bin/backblaze_backup.sh
+    owner: root
+    group: root
+    mode: "755"
+
+- name: Copy service and timer file
+  ansible.builtin.copy:
+    src: backblaze_backup.service backblaze_backup.timer
+    dest: /etc/systemd/system
+    owner: root
+    group: root
+    mode: "644"

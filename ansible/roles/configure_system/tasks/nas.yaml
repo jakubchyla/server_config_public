@@ -1,0 +1,14 @@
+- name: Create nas sshfs user
+  ansible.builtin.user:
+    name: "{{ ansible_user }}_sshfs"
+    home: "/home/{{ ansible_user }}_sshfs"
+    state: present
+    shell: "/usr/bin/nologin"
+
+- name: Create nas directory
+  ansible.builtin.file:
+    path: "/data/chroot/nas"
+    state: directory
+    owner: "{{ ansible_user }}_sshfs"
+    group: "{{ ansible_user }}_sshfs"
+    mode: "700"
